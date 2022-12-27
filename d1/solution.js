@@ -18,7 +18,6 @@ console.log(elves)
 
 
 // Day 1- Part 2
-
 let allElves = input
                 .split('\n\n')
                 .map((e) => e.split('\n'))
@@ -27,7 +26,6 @@ let allElves = input
                 })
 
 let top3elves = 0
-console.log(allElves)
 for (let i = 0; i < 3; i++){
     let topElf =allElves.reduce(function(max, e) {
         e > max ? max = e : null
