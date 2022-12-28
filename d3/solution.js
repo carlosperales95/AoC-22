@@ -6,7 +6,7 @@ let abc = ['a', 'b', 'c', 'd', 'e', 'f' , 'g', 'h', 'i', 'j', 'k', 'l', 'm' ,'n'
             'A', 'B', 'C', 'D', 'E', 'F' , 'G', 'H', 'I', 'J', 'K', 'L', 'M' ,'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 
-// Day 3 - Part1
+// Day 3 - Part 1
 
 const unique = (value, index, self) => {
     return self.indexOf(value) === index
@@ -21,23 +21,17 @@ let backpacks = input
                                     .filter((l) => b[1].includes(l))
                                     .filter(unique)
                         
-                        // console.log("srtring1: " + b[0] + " string2: " + b[1])
-                        // let score = letters.reduce((add, l) => add += (abc.indexOf(l) + 1), 0)
-                        
                         let score = abc.indexOf(letters[0]) + 1
                         sum += score
-                        // if (score === 0){
-                        //     console.log('letters: ' + letters + ' score: ' + score + ' sum: ' + sum)
-                        //     console.log("srtring1: " + b[0] + " string2: " + b[1])
-                        // }
+
                         return sum
-                    },0)
+                    }, 0)
 
 
 console.log(backpacks)
 
 
-// Day 3 - Part1
+// Day 3 - Part 2
 
 let splitter = 0
 let group = []
@@ -64,7 +58,7 @@ let badges = input
                     sum += score
                     
                     return sum
-                },0)
+                }, 0)
                 
 
 console.log(badges)

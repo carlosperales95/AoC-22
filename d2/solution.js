@@ -46,8 +46,8 @@ function rockPaperScisDefault(round){
 let rounds = input
                 .split('\n')
                 .map((r) => r.split(' ').join(''))
-                .reduce(function(sum, r){
-                    return sum +=rockPaperScisDefault(r)
+                .reduce(function(sum, r) {
+                    return sum += rockPaperScisDefault(r)
                 }, 0)
 
 console.log(rounds)
@@ -97,8 +97,8 @@ function rockPaperScisCorrected(round){
 let correctRounds = input
                 .split('\n')
                 .map((r) => r.split(' ').join(''))
-                .reduce(function(sum, r){
-                    return sum +=rockPaperScisCorrected(r)
+                .reduce(function(sum, r) {
+                    return sum += rockPaperScisCorrected(r)
                 }, 0)
 
 console.log(correctRounds)

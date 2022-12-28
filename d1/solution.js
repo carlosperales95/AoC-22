@@ -17,7 +17,7 @@ let elves = input
 console.log(elves)
 
 
-// Day 1- Part 2
+// Day 1 - Part 2
 let allElves = input
                 .split('\n\n')
                 .map((e) => e.split('\n'))
@@ -26,11 +26,13 @@ let allElves = input
                 })
 
 let top3elves = 0
+
 for (let i = 0; i < 3; i++){
     let topElf =allElves.reduce(function(max, e) {
         e > max ? max = e : null
         return max
     }, 0)
+    
     top3elves += topElf
     allElves.splice(allElves.indexOf(topElf), 1)
 }
