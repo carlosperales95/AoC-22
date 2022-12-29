@@ -1,113 +1,198 @@
-import { Console } from 'console'
 import fs from 'fs'
 
+// Input file for challenge
 const input = fs.readFileSync('input.txt', 'utf8')
 
-let count = 0
 // Day 8 - Part 1
 
+// Split full file input in lines
 const lines = input.split('\n')
 
-function isTreeVisible(columnIndex, lineIndex, value) {
-    
+// Evaluates if tree is visible, returns true/false
+function isTreeVisible(columnIndex, lineIndex, value) {  
+    // Get full row, split left/right, evaluate visibility          
+    let row = lines[lineIndex].split('')
+
+    let splitRows = [row.slice(0, columnIndex)]
+    splitRows.push(row.slice(-(row.length - (columnIndex + 1))))
+
+    let visibleRow = splitRows
+                            .some((c) =>  c.every((t) => t < value))
+
+
+    // Get full column, split up/down, evaluate visibility          
     let column = lines
                     .reduce((surr, l) => { 
                         surr.push(l.split('')[columnIndex]) 
                         return surr 
                     }, [])
-                    
-    let row = lines[lineIndex].split('')
-
-    let splitRows = [row.slice(0, columnIndex)]
-    // if(columnIndex != (row.length -1)) {
-    splitRows.push(row.slice(-(row.length - (columnIndex + 1))))
-    // }
-    // else{
-    //     splitRows = [row]
-    // }
-    let splitCols = [column.slice(0, lineIndex)]
-    // if(lineIndex != (column.length - 1)) {
-    splitCols.push(column.slice(-(column.length - (lineIndex + 1))))
-    // }else{
-    //     splitCols = [column]
-    // }
     
-    console.log("Tree value: " + value + " | index: " + columnIndex+"/"+lineIndex)
-    console.log(splitRows)
-    console.log(splitCols)
- 
-
+    let splitCols = [column.slice(0, lineIndex)]
+    splitCols.push(column.slice(-(column.length - (lineIndex + 1))))
+    
     let visibleCol = splitCols
                         .some((c) =>  c.every((t) => t < value))
-    
-    let visibleRow = splitRows
-                        .some((c) =>  c.every((t) => t < value))
-    
-                            
-    const isVisible = [visibleCol, visibleRow].some((e) => e)
-
-    // console.log(isVisible)
-    isVisible ? count+=1 : console.log("Not Visible!") 
-
-    return isVisible
+       
+    // If visible in column or row, then tree is visible                       
+    return (visibleCol || visibleRow)
 }
 
-let resultmatrix = []
+// Iterate for each tree in file and find count of which are visible
+function getVisibleTrees(lines, visualize) {
+    // resultMatrix will only be used for visualization purposes
+    let resultMatrix = []
 
-const visibleTrees = lines
-                        .map((l) => l.split(''))
-                        .map((l, i) => {
-                            let visibles = l.filter((t, j) => {
-                                // console.log(j + " " + i + " " + t)
-                                // console.log("Visible?" + isTreeVisible(j, i, t))
-                                // return isTreeVisible(j, i, t)
-                                if (i > 0 && i < 98 && j > 0 && j < 98) {
-                                    if (isTreeVisible(j, i, t)) resultmatrix.push('O')
-                                    else resultmatrix.push('X')
+    const visibleTrees = lines
+                            .map((l) => l.split(''))
+                            .map((l, i) => {
+                                let visibles = l.filter((t, j) => {
+                                    if (i > 0 && i < (l.length-1) && j > 0 && j < (l.length-1)) {
 
-                                    return isTreeVisible(j, i, t)
-                                }
-                                else {
-                                    resultmatrix.push('X')
-                                    return false
-                                }
-                             })
-                            //  console.log(visibles)
-                            resultmatrix.push('\n')
-                            return visibles
-                        })
+                                        if (visualize) {
+                                            if (isTreeVisible(j, i, t)) resultMatrix.push('X')
+                                            else resultMatrix.push('O')
+                                        }
 
-// console.log(visibleTrees)
-console.log(count + 97 + 97 + 97 + 97 + 4)
+                                        return isTreeVisible(j, i, t)
+                                    }
+                                    else {
+                                        if (visualize) resultMatrix.push('X')
 
-let res = visibleTrees.filter((x) => x.length > 0)
-const finalCount = res.reduce((sum, l) => sum +=l.length, 0)
-// console.log(finalCount + 97 + 97 + 97 + 97 + 4)
-// console.log(res + 97 + 97 + 97 + 97 + 4)
+                                        return false
+                                    }
+                                })
+                                if (visualize) resultMatrix.push('\n')
 
-
-// console.log(visibleTrees.reduce((sum, l) => {
-//                                             sum += l.length
-//                                             return sum
-//                                         },0))
-
-// console.log(count + 97 + 97 + 97 + 97 + 4)
-
-// // console.log(isTreeVisible(3, 12, 4))
-// console.log(isTreeVisible(1, 97, 3))
-// console.log(isTreeVisible(47, 97, 5))
-
-
-// Part 1: 1851
-
-// Part 2: 574080
-
-
-fs.writeFile('Output.txt', resultmatrix.join(''), (err) => {
+                                return visibles
+                            })
+    
+    // Painting visualization in the output file (X = visible / O = non-visible)
+    if (visualize) {
+        fs.writeFile('visible-visualization.txt', resultMatrix.join(''), (err) => {
           
-    // In case of a error throw err.
-    if (err) throw err;
-})
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+    }
 
-let countxt = resultmatrix.filter((x) => x==='O').length
-console.log(countxt)
+    // Count Visible Trees
+    let result = visibleTrees
+                        .filter((x) => x.length > 0)
+                        .reduce((sum, l) => sum +=l.length, 0)
+
+    // Result does not count the perimeter, as those are already discarded as visible
+    // Perimeter = ((SideLength - 2) * 4 ) + 4
+    return (result + (4 * (lines[0].split('').length - 2)) + 4)
+}
+
+// Print result of Part 1
+console.log(getVisibleTrees(lines, false))
+
+
+// Day 8 - Part 2 - 327180
+
+function scenicScore(columnIndex, lineIndex, value) {  
+    // Get full row, split left/right, evaluate visibility          
+    let row = lines[lineIndex].split('')
+
+    let splitRows = [row.slice(0, columnIndex).reverse()]
+    splitRows.push(row.slice(-(row.length - (columnIndex + 1))))
+
+    let rowScore = splitRows
+                        .reduce((score, parts) => {
+                            let block = false
+                            let res = parts.reduce((sum, t) => {
+                                if(sum===0) block = false
+                                if(block) return sum
+                                if (t < value) {
+                                    return sum+=1
+                                } else {
+                                    block = true 
+                                    return sum+=1
+                                } 
+                            }, 0)
+                            score *= res
+                            return score
+                        }, 1)
+
+    // Get full column, split up/down, evaluate visibility          
+    let column = lines
+                    .reduce((surr, l) => { 
+                        surr.push(l.split('')[columnIndex]) 
+                        return surr 
+                    }, [])
+    
+    let splitCols = [column.slice(0, lineIndex).reverse()]
+    splitCols.push(column.slice(-(column.length - (lineIndex + 1))))
+    
+
+    let colScore = splitCols
+                        .reduce((score, parts) => {
+                            let block = false
+                            let res = parts.reduce((sum, t) => {
+                                if(sum===0) block = false
+                                if(block) return sum
+                                if (t < value) {
+                                    return sum+=1
+                                } else {
+                                    block = true 
+                                    return sum+=1
+                                } 
+                            }, 0)
+                            score *= res
+                            return score
+                        }, 1)
+                   
+    return (colScore * rowScore)
+}
+
+
+function getAllScores(lines, visualize) {
+    // resultMatrix will only be used for visualization purposes
+    let resultMatrix = []
+
+    const visibleTrees = lines
+                            .map((l) => l.split(''))
+                            .map((l, i) => {
+                                let scores = l.map((t, j) => {
+                                    if (i > 0 && i < (l.length-1) && j > 0 && j < (l.length-1)) {
+                                        if (visualize) resultMatrix.push('['+scenicScore(j, i, t)+']')
+                                        return scenicScore(j, i, t)
+                                    }
+                                    else {
+                                        if (visualize) resultMatrix.push('['+ 0 +']')
+                                        return 0
+                                    }
+                                })
+                                if (visualize) resultMatrix.push('\n')
+
+                                return scores
+                            })
+    
+    // Painting visualization in the output file (X = visible / O = non-visible)
+    if (visualize) {
+        fs.writeFile('visible-visualization.txt', resultMatrix.join(''), (err) => {
+          
+            // In case of a error throw err.
+            if (err) throw err;
+        })
+    }
+
+    // Count Visible Trees
+    let result = visibleTrees
+                            .reduce((joined, tree) => {
+                                // console.log(tree)
+                                return joined.concat(tree)
+                            }, [])
+                        
+                        // .filter((x) => x > 0)
+                        // .reduce((sum, l) => sum +=l.length, 0)
+    console.log(Math.max(...result))
+
+    // Result does not count the perimeter, as those are already discarded as visible
+    // Perimeter = ((SideLength - 2) * 4 ) + 4
+    // return (result + (4 * (lines[0].split('').length - 2)) + 4)
+}
+
+getAllScores(lines, true)
+// scenicScore(3, 1, 3)
