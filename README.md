@@ -1,6 +1,6 @@
 # AoC-22
 
-![](https://img.shields.io/badge/day%20📅-22-blue)
+![](https://img.shields.io/badge/day%20📅-22-blue)  ![](https://img.shields.io/badge/stars%20⭐-34-yellow)
 
 My (late) attempt at resolving each of the [Advent of Code '22](https://adventofcode.com/) challenges.
 
