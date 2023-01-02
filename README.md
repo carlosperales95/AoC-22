@@ -9,7 +9,7 @@ My (late) attempt at resolving each of the [Advent of Code '22](https://adventof
 My attempts are be written in JS, to try and polish my *JS Functional Programming skills* (filter, map, reduce, some, every, find...)
 I will try using **high-order functions only**, and make the results **as optimized as possible** (the fewer lines the better, without losing too much time over it).
 
-## To run the code for each chalenge
+## To run the code for each challenge
 Go into any folder for each of the days (e.g.):
 ```
 cd d1
