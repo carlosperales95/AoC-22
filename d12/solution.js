@@ -21,8 +21,16 @@ console.log(grid)
 // Evaluate current spot s | s == E?
 // if so, stop
 // if not, fetch possible spots
-// for each possible stop calculate score (max heigh = current height +1)
+// for each possible stop calculate score: distance to E (max height = current height +1)
 // select best spot
 // will not make algorithm blind, will see at least 1/2 steps ahead to calc score
+
+
+
+
+
+
+// Day 12 - Part 2
+
 
 
